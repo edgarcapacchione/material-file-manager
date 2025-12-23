@@ -1,0 +1,30 @@
+<h2 mat-dialog-title>Search files</h2>
+<mat-dialog-content>
+  <mat-form-field appearance="outline" style="width:100%">
+    <mat-label>Search text</mat-label>
+    <input matInput [ngModel]="str" (ngModelChange)="typed($event)"/>
+  </mat-form-field>
+  <mat-list>
+    @if (((result$ | async) ?? []).length > 0) {
+      <mat-divider></mat-divider>
+    }
+    @for (item of (result$ | async); track item) {
+      <div (click)="resultClicked(item)">
+        <mat-list-item>
+          @if (!item.isFolder) {
+            <mat-icon matListItemIcon>description</mat-icon>
+          }
+          @else {
+            <mat-icon matListItemIcon>folder</mat-icon>
+          }
+          <div matListItemTitle class="matListItemTitle">{{item.name}}</div>
+          <div matListItemLine class="matListItemLine">{{item.path}}</div>
+        </mat-list-item>
+      </div>
+      <mat-divider></mat-divider>
+    }
+  </mat-list>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="close()">Close</button>
+</mat-dialog-actions>

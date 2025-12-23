@@ -1,0 +1,29 @@
+<mat-toolbar class="breadcrumb" [class.full-breadcrumb]="!sidenav.isOpen()">
+  @for (element of browseService.getBreadcrumb(); track element; let  i = $index) {
+    @if (i == 0) {
+      <button matButton (click)="getBackTo(0)">/</button> 
+    } 
+    @else {
+      <mat-icon>arrow_right</mat-icon>
+      <button matButton (click)="getBackTo(i)">{{element}}</button>
+    }
+  }
+
+  <span class="toolbar-spacer"></span>
+
+  <button matIconButton (click)="changeMode('list')">
+    <mat-icon>format_list_bulleted</mat-icon>
+  </button>
+  <button matIconButton (click)="changeMode('grid')">
+    <mat-icon>grid_view</mat-icon>
+  </button>
+  <button matIconButton (click)="changeMode('tree')">
+    <mat-icon>lan</mat-icon>
+  </button>
+
+  <mat-divider vertical></mat-divider>
+  
+  <button matIconButton>
+    <mat-icon>contrast</mat-icon>
+  </button>
+</mat-toolbar>

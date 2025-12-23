@@ -1,0 +1,18 @@
+<div class="browse-grid">
+  @for (element of (browseService.getFilesObservable() | async); track element.id) {
+    <div cdkDrag>
+      <button cdkDragHandle mat-menu-item class="grid-item" [id]="element.id"
+        [ngClass]="(browseService.getSelectedObservable() | async)?.includes(element.id) ? 'grid-item-selected' : 'grid-item-not-selected'"
+        [class.grid-item-cut]="toolbarService.action == 'cut' && browseService.getClipboard().includes(element.id)"
+        (dblclick)="browse(element); $event.stopPropagation(); false">
+          @if (element.isFolder) {
+            <mat-icon class="grid-item-element">folder</mat-icon>
+          }
+          @else {
+            <mat-icon class="grid-item-element">description</mat-icon>
+          }
+        {{element | fileName}}
+      </button>
+    </div>
+  }
+</div>

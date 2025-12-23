@@ -1,0 +1,11 @@
+<h2 mat-dialog-title>New name</h2>
+<mat-dialog-content>
+  <mat-form-field appearance="outline" style="width:100%">
+    <mat-label>New name</mat-label>
+    <input matInput [(ngModel)]="targetName" />
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="skip()">Skip file</button>
+  <button mat-raised-button color="primary" [disabled]="!targetName || fileNames.includes(targetName)" (click)="ok()">Confirm</button>
+</mat-dialog-actions>

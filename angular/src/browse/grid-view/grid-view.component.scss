@@ -1,0 +1,46 @@
+.browse-grid {
+    align-items: flex-start;
+    display: inline-flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.grid-item-element {
+    width: 75px;
+    height: 75px;
+    font-size: 75px;
+    margin-right: 0;
+}
+
+.grid-item {
+    flex-direction: column;
+    gap: 5px;
+    padding-top: 5px;
+    padding-bottom: 10px;
+    width: 125px;
+    height: 125px;
+    word-break: break-all;
+}
+
+.grid-item:hover {
+    border-radius: .35em;
+}
+
+.grid-item-selected {
+    border-radius: .35em;
+    background-color: var(--mat-menu-item-hover-state-layer-color, color-mix(in srgb, var(--mat-sys-on-surface) calc(var(--mat-sys-hover-state-layer-opacity) * 100%), transparent));
+}
+
+.grid-item-selected.ds-selected, .grid-item-not-selected.ds-selected {
+    border-radius: .35em !important;
+    background-color: var(--mat-menu-item-hover-state-layer-color, color-mix(in srgb, var(--mat-sys-on-surface) calc(var(--mat-sys-hover-state-layer-opacity) * 100%), transparent)) !important;
+}
+
+.grid-item-not-selected {
+    border-radius: 0em;
+    background: transparent;
+}
+
+.grid-item-cut {
+    color: #676767;
+}

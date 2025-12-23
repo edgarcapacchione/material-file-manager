@@ -1,0 +1,37 @@
+h2 {
+    margin: 25px 25px 10px 25px;
+}
+
+mat-divider {
+    border-color: #333333;
+}
+
+// desktop
+@media (min-width: 600px) {
+    mat-dialog-content {
+        min-width: var(--mat-dialog-container-max-width, 540px) !important;
+        height: 55vh !important;
+    } 
+}
+
+// mobile
+mat-dialog-content {
+    max-width: var(--mat-dialog-container-max-width, 380px);
+    min-width: var(--mat-dialog-container-max-width, 380px);
+    height: 50vh;
+} 
+
+mat-list-item {
+    align-items: center;
+    gap: 10px;
+    padding-top: 5px;
+}
+
+mat-list-item:hover {
+    background-color: #1e1e1e;
+    cursor: pointer !important;
+}
+
+.matListItemLine {
+    font-size: 12px;
+}

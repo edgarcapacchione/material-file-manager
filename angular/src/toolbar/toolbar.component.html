@@ -1,0 +1,100 @@
+<mat-toolbar color="primary">
+  @if (!(isHandset$ | async)) {
+    @if (!sidenav.isOpen()) {
+      <button matIconButton type="button" aria-label="Toggle sidenav" (click)="sidenav.toggle()">
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+      <mat-divider vertical class="burger"></mat-divider>
+    }
+  }
+  <button matIconButton [disabled]="browseService.getHistoryPointer() == 0" (click)="goBack()">
+    <mat-icon>arrow_left</mat-icon>
+  </button>
+  <button matIconButton [disabled]="browseService.getHistoryPointer() >= (browseService.getHistory().length - 1)" (click)="goForward()">
+    <mat-icon>arrow_right</mat-icon>
+  </button>
+
+  <button matIconButton (click)="refresh()">
+    <mat-icon class="icon-button">refresh</mat-icon>
+  </button>
+
+  <span class="toolbar-spacer"></span>
+
+  @if (browseService.getSelected().length > 0) {
+    <button matButton [matMenuTriggerFor]="contextMenu">
+      {{getSelected(browseService.getSelectedObservable() | async, browseService.getFilesObservable() | async)}}
+      <mat-icon>arrow_drop_down</mat-icon>
+    </button>
+  }
+  <button matIconButton (click)="toolbarService.createFolder()">
+    <mat-icon class="icon-button">create_new_folder</mat-icon>
+  </button>
+  <button matIconButton [disabled]="browseService.getClipboard().length == 0" (click)="toolbarService.paste()">
+    <mat-icon class="icon-button">content_paste</mat-icon>
+  </button>
+
+  <mat-divider vertical></mat-divider>
+  
+  @if (browseService.getSelected().length > 0) {
+    <button matIconButton (click)="toolbarService.copyToClipboard('copy')">
+      <mat-icon class="icon-button">content_copy</mat-icon>
+    </button>
+    <button matIconButton (click)="toolbarService.copyToClipboard('cut')">
+      <mat-icon class="icon-button">content_cut</mat-icon>
+    </button>
+    <button matIconButton (click)="toolbarService.delete()">
+      <mat-icon class="icon-button">delete</mat-icon>
+    </button>
+    <mat-divider vertical></mat-divider>
+  }
+  <!-- <button mat-button>
+    <mat-icon>swap_vert</mat-icon>Ordina
+  </button>
+  <button mat-button>
+    <mat-icon>filter_alt</mat-icon>Filtra
+  </button> -->
+  <button mat-button (click)="toolbarService.search()">
+    <mat-icon>search</mat-icon>Search
+  </button>
+</mat-toolbar>
+
+<!-- START CONTEXT MENUS -->
+<mat-menu #contextMenu="matMenu">
+  <button mat-menu-item (click)="toolbarService.copyToClipboard('cut')">
+    <mat-icon>content_cut</mat-icon>
+    Cut
+  </button>
+  <button mat-menu-item (click)="toolbarService.copyToClipboard('copy')">
+    <mat-icon>content_copy</mat-icon>
+    Copy
+  </button>
+  <button mat-menu-item (click)="toolbarService.rename()" [class.hide]="browseService.getSelected().length != 1">
+    <mat-icon>edit_note</mat-icon>
+    Rename
+  </button>
+  <button mat-menu-item (click)="toolbarService.delete()">
+    <mat-icon>delete</mat-icon>
+    Delete
+  </button>
+  <!-- <button mat-menu-item [matMenuTriggerFor]="animals">
+    Animals
+  </button> -->
+</mat-menu>
+
+<!-- <mat-menu #animals="matMenu">
+  <button mat-menu-item [matMenuTriggerFor]="vertebrates">Vertebrates</button>
+  <button mat-menu-item [matMenuTriggerFor]="invertebrates">Invertebrates</button>
+</mat-menu>
+<mat-menu #vertebrates="matMenu">
+  <button mat-menu-item [matMenuTriggerFor]="fish">Fishes</button>
+  <button mat-menu-item>Birds</button>
+  <button mat-menu-item>Mammals</button>
+</mat-menu>
+<mat-menu #invertebrates="matMenu">
+  <button mat-menu-item>Squid</button>
+</mat-menu>
+<mat-menu #fish="matMenu">
+  <button mat-menu-item>Crab</button>
+</mat-menu> -->
+
+<!-- END CONTEXT MENUS -->

@@ -1,0 +1,75 @@
+# Material File Manager UI
+
+An open-source **file manager UI** built with **Angular 20+ and Angular Material**, backed by a **Spring Boot** REST API.
+
+The project provides a modern, responsive, and mobile-friendly interface to manage files and directories, inspired by common desktop file managers but optimized for the web.
+
+---
+
+## Features
+
+- 📁 Directory navigation (browse folders and subfolders)
+- 📄 File preview
+  - Supported formats: **PDF**, **TXT**
+- 📋 File operations
+  - Copy / Paste
+  - Move
+  - Delete
+- 🧩 Multiple views
+  - Grid view
+  - List view
+- 📱 Responsive UI
+  - Fully compatible with mobile and tablet devices
+  - Built with Angular Material components
+
+---
+
+## Tech Stack
+
+### Frontend
+- **Angular 20+**
+- **Angular Material**
+- Responsive layout with Material Design principles
+
+### Backend
+- **Spring Boot**
+- RESTful API for file system operations
+
+---
+
+## Project Goals
+
+- Provide a clean and intuitive file management UI
+- Keep the project lightweight and easy to extend
+- Serve as a reusable base for custom file management solutions
+
+---
+
+## Status
+
+🚧 **Work in progress**
+
+Current limitations:
+- File preview limited to PDF and TXT
+- No authentication/authorization (yet)
+
+---
+
+## License
+
+This project is released under an **open-source license**.  
+Feel free to use, modify, and contribute.
+
+---
+
+## Contributions
+
+Contributions are welcome!  
+Bug reports, feature requests, and pull requests are encouraged.
+
+---
+
+## Disclaimer
+
+This project is intended as a general-purpose file manager UI.  
+Security, access control, and advanced file handling should be implemented according to your specific use case.

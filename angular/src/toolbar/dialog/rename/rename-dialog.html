@@ -1,0 +1,11 @@
+<h2 mat-dialog-title>Rename</h2>
+<mat-dialog-content>
+  <mat-form-field appearance="outline" style="width:100%">
+    <mat-label>New name</mat-label>
+    <input matInput [(ngModel)]="dirName" />
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="ok()" [disabled]="!dirName || fileNames.includes(dirName)">Confirm</button>
+</mat-dialog-actions>

@@ -1,0 +1,22 @@
+<mat-dialog-actions>
+  <button matIconButton (click)="back()">
+    <mat-icon>close</mat-icon>
+  </button>
+</mat-dialog-actions>
+
+<mat-dialog-content>
+    <!-- text file -->
+    @if ((viewerService.observeLayout() | async) == 'code-editor') {
+      <ngx-code-editor
+        [ngModel]="viewerService.observe() | async"
+        [theme]="codeEditorTheme"
+        [language]="'javascript'"
+        [lineWrapping]="true"
+        [readonly]="'true'">
+      </ngx-code-editor>
+    }
+    <!-- PDF file -->
+    @if ((viewerService.observeLayout() | async) == 'pdf') {
+      <iframe [src]="(viewerService.observe() | async) | safe" width="100%" height="100%" frameborder="0"></iframe>
+    }
+</mat-dialog-content>

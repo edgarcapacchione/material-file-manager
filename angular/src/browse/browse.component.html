@@ -1,0 +1,34 @@
+<div class="browse-area" tabindex="0" [matContextMenuTriggerFor]="contextMenu"
+  (keydown.control.a)="browseService.selectAll(); $event.preventDefault()"
+  (keydown.control.c)="toolbarService.copyToClipboard('copy')"
+  (keydown.control.x)="toolbarService.copyToClipboard('cut')"
+  (keydown.control.v)="toolbarService.paste()"
+  (keydown.control.shift.f)="toolbarService.search()">
+    @if (browseService.getMode() == 'grid') {
+      <app-grid-view (browseEvent)="browse($event)"></app-grid-view>
+    }
+    @if (browseService.getMode() == 'list') {
+      <app-list-view (browseEvent)="browse($event)"></app-list-view>
+    }
+</div>
+
+<!-- context menus start -->
+<mat-menu #contextMenu>
+  <button mat-menu-item>
+    <mat-icon>content_cut</mat-icon>
+    Cut
+  </button>
+  <button mat-menu-item>
+    <mat-icon>content_copy</mat-icon>
+    Copy
+  </button>
+  <button mat-menu-item>
+    <mat-icon>content_paste</mat-icon>
+    Paste
+  </button>
+  <button mat-menu-item>
+    <mat-icon>print</mat-icon>
+    Print
+  </button>
+</mat-menu>
+<!-- context menus end -->
