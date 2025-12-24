@@ -1,11 +1,10 @@
 # Material File Manager UI
 
----<img width="1945" height="1174" alt="Immagine 2025-12-24 141855" src="https://github.com/user-attachments/assets/ee59343e-33bd-408f-abe0-603c7d471ba2" />
-
 An open-source **file manager UI** built with **Angular 20+ and Angular Material**, backed by a **Spring Boot** REST API.
 
 The project provides a modern, responsive, and mobile-friendly interface to manage files and directories, inspired by common desktop file managers but optimized for the web.
 
+<img width="1945" height="1174" alt="Immagine 2025-12-24 141855" src="https://github.com/user-attachments/assets/ee59343e-33bd-408f-abe0-603c7d471ba2" />
 
 ## Features
 
