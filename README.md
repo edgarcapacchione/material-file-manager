@@ -15,6 +15,7 @@ The project provides a modern, responsive, and mobile-friendly interface to mana
   - Copy / Paste
   - Move
   - Delete
+- 🔍 File Search
 - 🧩 Multiple views
   - Grid view
   - List view
