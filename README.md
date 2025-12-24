@@ -4,7 +4,7 @@ An open-source **file manager UI** built with **Angular 20+ and Angular Material
 
 The project provides a modern, responsive, and mobile-friendly interface to manage files and directories, inspired by common desktop file managers but optimized for the web.
 
-<img width="1945" height="1174" alt="Immagine 2025-12-24 141855" src="https://github.com/user-attachments/assets/ee59343e-33bd-408f-abe0-603c7d471ba2" />
+<img width="1917" height="988" alt="530016120-ee59343e-33bd-408f-abe0-603c7d471ba2" src="https://github.com/user-attachments/assets/08ee614c-55db-4e4d-a1de-5db485c196a4" />
 
 ## Features
 
