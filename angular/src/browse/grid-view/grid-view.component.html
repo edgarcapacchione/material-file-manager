@@ -3,7 +3,7 @@
     <div cdkDrag>
       <button cdkDragHandle mat-menu-item class="grid-item" [id]="element.id"
         [ngClass]="(browseService.getSelectedObservable() | async)?.includes(element.id) ? 'grid-item-selected' : 'grid-item-not-selected'"
-        [class.grid-item-cut]="toolbarService.action == 'cut' && browseService.getClipboard().includes(element.id)"
+        [class.grid-item-cut]="toolbarService.action == 'cut' && browseService.getClipboard().includes(browseService.getItemAbsolutePath(element.name))"
         (dblclick)="browse(element); $event.stopPropagation(); false">
           @if (element.isFolder) {
             <mat-icon class="grid-item-element">folder</mat-icon>

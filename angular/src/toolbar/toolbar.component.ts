@@ -40,7 +40,7 @@ export class ToolbarComponent {
     this.browseService.refresh();
   }
 
-  getSelected(selectedList: number[] | null, filesList: any[] | null): string {
+  getSelected(selectedList: string[] | null, filesList: any[] | null): string {
     if (!!selectedList && selectedList?.length > 0) {
       if (selectedList?.length > 1) {
         return `${selectedList?.length} elements selected`;

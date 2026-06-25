@@ -56,6 +56,30 @@ Current limitations:
 
 ---
 
+## Local setup
+
+The backend exposes the API on `http://localhost:8080`. The Angular development
+server proxies `/api` requests to that address.
+
+```powershell
+cd spring-boot
+mvn spring-boot:run
+```
+
+In another terminal:
+
+```powershell
+cd angular
+npm install
+npm start
+```
+
+By default, files are managed only inside `${user.home}/mfm-files`. Set the
+`MFM_ROOT_PATH` environment variable before starting Spring Boot to use a
+different directory. Operations that escape this root are rejected.
+
+---
+
 ## License
 
 This project is released under an **open-source license**.  

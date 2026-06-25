@@ -17,8 +17,8 @@ export class BrowseService {
   private filesObserver = new BehaviorSubject<any[]>([]);
   private files$: Observable<any[]> = this.filesObserver.asObservable();
   // observable selected files list
-  private selectedObserver = new BehaviorSubject<number[]>([]);
-  private selected$: Observable<number[]> = this.selectedObserver.asObservable();
+  private selectedObserver = new BehaviorSubject<string[]>([]);
+  private selected$: Observable<string[]> = this.selectedObserver.asObservable();
   // observe when data is arrived from backend
   public filesChangedObserver = new BehaviorSubject<boolean>(false);
 
@@ -63,7 +63,7 @@ export class BrowseService {
     return this.files$;
   }
 
-  getSelectedObservable(): Observable<number[]> {
+  getSelectedObservable(): Observable<string[]> {
     return this.selected$;
   }
 
@@ -79,7 +79,7 @@ export class BrowseService {
     return this.historyPointer;
   }
 
-  getSelected(): number[] {
+  getSelected(): string[] {
     return this.selectedObserver.value;
   }
 
@@ -91,15 +91,15 @@ export class BrowseService {
     this.clipboard.push(value);
   }
 
-  isSelected(id: number): boolean {
+  isSelected(id: string): boolean {
     return this.getSelected().some(i => id == i);
   }
 
-  selectElement(id: number): void {
+  selectElement(id: string): void {
     this.selectedObserver.next(this.getSelected().concat(id));
   }
 
-  unselectElement(id: number): void {
+  unselectElement(id: string): void {
     this.selectedObserver.next(this.getSelected().filter(i => i != id));
   }
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BackendService } from '../common/backend.service';
+import { BackendService, FileOperation } from '../common/backend.service';
 import { MatDialog } from '@angular/material/dialog';
 import { BrowseService } from '../browse/browse.service';
 import { CreateFolderDialog } from './dialog/create-folder/create-folder-dialog';
@@ -51,7 +51,7 @@ export class ToolbarService {
         }
         const source = `${this.browseService.getCurrentPath()}/${oldName}`;
         const target = `${this.browseService.getCurrentPath()}/${result}`;
-        this.backend.mv([source, target]).subscribe({
+        this.backend.mv([{source, target}]).subscribe({
           next: () => this.browseService.refresh(),
           error: (e) => this.snack.open(e, 'OK')
         });
@@ -77,7 +77,7 @@ export class ToolbarService {
 
   paste(): void {
     const clipboard = this.browseService.getClipboard();
-    const payload: { source: string, target: string | null }[] = [];
+    const payload: FileOperation[] = [];
     from(clipboard).pipe(
       concatMap(s => {
         const sourceName = s.substring(s.lastIndexOf('/') + 1);
@@ -106,7 +106,7 @@ export class ToolbarService {
           return;
         }
         // nuovo nome
-        payload.push(result);
+        payload.push({source: result.source, target: result.target});
       },
       complete: () => {
         if (payload.length == 0) {

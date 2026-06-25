@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { ToolbarComponent } from '../toolbar/toolbar.component';
 import { BreadcrumbComponent } from '../breadcrumb/breadcrumb.component';
-import { Router, RouterLink, RouterLinkActive, RouterModule, RouterOutlet } from '@angular/router';
+import { RouterLink, RouterLinkActive, RouterModule, RouterOutlet } from '@angular/router';
 import { SidenavService } from './sidenav.service';
 
 @Component({
@@ -41,15 +41,11 @@ export class App {
     .observe(Breakpoints.Handset)
     .pipe(map(result => result.matches), shareReplay());
 
-  constructor(private router: Router, private sidenav: SidenavService) {
+  constructor(private sidenav: SidenavService) {
     this.sidenav.observer.subscribe(() => {
       this.drawer.toggle();
       this.sidenav.setOpen(this.drawer.opened);
     });
-  }
-
-  ngOnInit(): void {
-    this.router.navigate(['/browse']);
   }
 
   toggle(): void {

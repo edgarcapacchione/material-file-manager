@@ -109,11 +109,11 @@ export class DragselectService {
   }
 
   private handleSelection(element: any): void {
-    if (this.ctrlPressed && this.browseService.isSelected(parseInt(element.id))) {
-      this.browseService.unselectElement(parseInt(element.id));
+    if (this.ctrlPressed && this.browseService.isSelected(element.id)) {
+      this.browseService.unselectElement(element.id);
       this.dragSelect?.removeSelection(element);
     } else {
-      this.browseService.selectElement(parseInt(element.id));
+      this.browseService.selectElement(element.id);
     }
   }
 }

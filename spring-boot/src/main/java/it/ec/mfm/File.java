@@ -5,14 +5,14 @@ import java.util.Date;
 
 public class File {
 
-    private Integer id;
+    private String id;
     private String name;
     private BigInteger size;
     private String type;
     private Date lastModifiedDate;
     private Boolean isFolder;
 
-    File(Integer id, String name, BigInteger size, String type, Date lastModifiedDate, Boolean isFolder) {
+    File(String id, String name, BigInteger size, String type, Date lastModifiedDate, Boolean isFolder) {
         this.id = id;
         this.name = name;
         this.size = size;
@@ -21,11 +21,11 @@ public class File {
         this.isFolder = isFolder;
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 

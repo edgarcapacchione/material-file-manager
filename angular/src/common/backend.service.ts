@@ -2,13 +2,18 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
+export interface FileOperation {
+  source: string;
+  target: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class BackendService {
 
   private http = inject(HttpClient);
-  private baseUrl = 'https://localhost:8080/api'; // TODO: globalizzarlo
+  private readonly baseUrl = '/api';
 
   ls(path: string): Observable<any> {
     return this.http.get(`${this.baseUrl}/ls`, {params: {path: path}});
@@ -18,12 +23,12 @@ export class BackendService {
     return this.http.post(`${this.baseUrl}/mkdir`, {currName: currName});
   }
 
-  mv(payload: any[]): Observable<any> {
-    return this.http.post(`${this.baseUrl}/mv`, payload);
+  mv(payload: FileOperation[]): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}/mv`, payload);
   }
 
-  cp(payload: any[]): Observable<any> {
-    return this.http.post(`${this.baseUrl}/cp`, payload);
+  cp(payload: FileOperation[]): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}/cp`, payload);
   }
 
   rm(targets: string[]): Observable<any> {
