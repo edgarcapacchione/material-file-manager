@@ -1,0 +1,40 @@
+pid /tmp/nginx.pid;
+lock_file /tmp/nginx.lock;
+user nginx;
+worker_processes auto;
+error_log /dev/stderr warn;
+
+events {
+    worker_connections 256;
+}
+
+http {
+    access_log /dev/stdout;
+    server_tokens off;
+
+    client_body_temp_path /tmp/client_body;
+    proxy_temp_path /tmp/proxy;
+    fastcgi_temp_path /tmp/fastcgi;
+    uwsgi_temp_path /tmp/uwsgi;
+    scgi_temp_path /tmp/scgi;
+
+    server {
+        listen 8080;
+        server_name ${MFM_DOMAIN};
+
+        location /.well-known/acme-challenge/ {
+            root /var/www/certbot;
+        }
+
+        location /nginx-health {
+            access_log off;
+            default_type text/plain;
+            return 200 "bootstrap\n";
+        }
+
+        location / {
+            default_type text/plain;
+            return 503 "TLS certificate not configured\n";
+        }
+    }
+}

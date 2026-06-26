@@ -1,72 +1,69 @@
-# Material File Manager UI
+# Material File Manager
 
-An open-source **file manager UI** built with **Angular 20+ and Angular Material**, backed by a **Spring Boot** REST API.
+File manager privato, mobile-first, costruito con Angular e Spring Boot.
 
-The project provides a modern, responsive, and mobile-friendly interface to manage files and directories, inspired by common desktop file managers but optimized for the web.
+Il progetto è in stabilizzazione. Non deve ancora essere l'unica copia di
+documenti importanti: upload atomico, cestino e backup Restic verificato sono le
+prossime priorità.
 
-<img width="1917" height="988" alt="530016120-ee59343e-33bd-408f-abe0-603c7d471ba2" src="https://github.com/user-attachments/assets/08ee614c-55db-4e4d-a1de-5db485c196a4" />
+## Architettura
 
-## Features
+In production vengono eseguiti due container:
 
-- 📁 Directory navigation (browse folders and subfolders)
-- 📄 File preview
-  - Supported formats: **PDF**, **TXT**
-- 📋 File operations
-  - Copy / Paste
-  - Move
-  - Delete
-- 🔍 File Search
-- 🧩 Multiple views
-  - Grid view
-  - List view
-- 📱 Responsive UI
-  - Fully compatible with mobile and tablet devices
-  - Built with Angular Material components
+```text
+Browser
+  |
+  | HTTPS
+  v
+Nginx + Angular statico
+  |
+  | rete Docker privata
+  v
+Spring Boot
+  |
+  v
+bind mount dei documenti sulla VPS
+```
 
----
+- Il container `frontend` compila Angular durante la build, serve gli asset con
+  Nginx, termina TLS e inoltra `/api`, `/oauth2` e `/login/oauth2`.
+- Il container `backend` esegue Spring Boot e non espone porte sull'host.
+- Angular non necessita di un container runtime separato: dopo la compilazione
+  è un insieme di file statici, già incluso nel container Nginx.
+- Nginx e Spring non vengono messi nello stesso container: hanno lifecycle,
+  privilegi, log, health check e frequenza di aggiornamento differenti.
+- Certbot è disponibile come container one-shot, non come servizio permanente.
 
-## Tech Stack
+La definizione si trova in [compose.yaml](compose.yaml). La guida VPS completa,
+inclusi certificati, firewall, rinnovo, aggiornamento e rollback, è in
+[deploy/README.md](deploy/README.md).
 
-### Frontend
-- **Angular 20+**
-- **Angular Material**
-- Responsive layout with Material Design principles
+## Funzionalità attuali
 
-### Backend
-- **Spring Boot**
-- RESTful API for file system operations
+- Navigazione directory in vista lista e griglia
+- Anteprima PDF e testo
+- Creazione cartelle, copia, spostamento, rinomina e cancellazione
+- Ricerca nella directory corrente
+- Login OIDC gestito da Spring Boot
+- Sessione server-side con cookie `Secure` e `HttpOnly`
+- Protezione CSRF compatibile con Angular
+- Allowlist production per identità OIDC o email verificata
+- Operazioni filesystem confinate alla root configurata
 
----
+## Sviluppo locale
 
-## Project Goals
-
-- Provide a clean and intuitive file management UI
-- Keep the project lightweight and easy to extend
-- Serve as a reusable base for custom file management solutions
-
----
-
-## Status
-
-🚧 **Work in progress**
-
-Current limitations:
-- File preview limited to PDF and TXT
-- No authentication/authorization (yet)
-
----
-
-## Local setup
-
-The backend exposes the API on `http://localhost:8080`. The Angular development
-server proxies `/api` requests to that address.
+Il profilo Spring predefinito è `prod` e fallisce intenzionalmente senza
+configurazione OIDC. Per lavorare in locale usare `dev`:
 
 ```powershell
 cd spring-boot
-mvn spring-boot:run
+mvn spring-boot:run "-Dspring-boot.run.profiles=dev"
 ```
 
-In another terminal:
+La root locale predefinita è `${user.home}/mfm-files-dev`. È possibile
+sovrascriverla con `MFM_ROOT_PATH`.
+
+In un altro terminale:
 
 ```powershell
 cd angular
@@ -74,27 +71,62 @@ npm install
 npm start
 ```
 
-By default, files are managed only inside `${user.home}/mfm-files`. Set the
-`MFM_ROOT_PATH` environment variable before starting Spring Boot to use a
-different directory. Operations that escape this root are rejected.
+Aprire `http://localhost:4200`. Il proxy Angular inoltra API e flussi OIDC a
+Spring Boot. Il profilo `dev` usa un'identità locale, mantenendo sessione e CSRF.
 
----
+## Avvio Docker production
 
-## License
+Sintesi; leggere prima la guida completa:
 
-This project is released under an **open-source license**.  
-Feel free to use, modify, and contribute.
+```bash
+cp deploy/.env.example deploy/.env
+chmod 0600 deploy/.env
+nano deploy/.env
 
----
+sudo install -d -o 10001 -g 10001 -m 0700 /srv/material-file-manager/data
 
-## Contributions
+docker compose --env-file deploy/.env build --pull
 
-Contributions are welcome!  
-Bug reports, feature requests, and pull requests are encouraged.
+docker compose --env-file deploy/.env up -d backend frontend
 
----
+docker compose --env-file deploy/.env --profile tools run \
+  --rm certbot \
+  certonly --webroot -w /var/www/certbot --agree-tos \
+  --email admin@example.com \
+  -d files.example.com
 
-## Disclaimer
+docker compose --env-file deploy/.env restart frontend
+docker compose --env-file deploy/.env ps
+```
 
-This project is intended as a general-purpose file manager UI.  
-Security, access control, and advanced file handling should be implemented according to your specific use case.
+Il callback OIDC da registrare è:
+
+```text
+https://files.example.com/login/oauth2/code/mfm
+```
+
+Non pubblicare la porta Spring `8080` e non eseguire
+`docker compose down -v`.
+
+## Verifica
+
+```powershell
+cd spring-boot
+mvn test
+
+cd ../angular
+npm test -- --watch=false --browsers=ChromeHeadless
+npm run build
+```
+
+Verifica Docker:
+
+```bash
+docker compose --env-file deploy/.env config
+docker compose --env-file deploy/.env build
+docker compose --env-file deploy/.env ps
+```
+
+## Licenza
+
+Il progetto è distribuito secondo la licenza presente nel repository.

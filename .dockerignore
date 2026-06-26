@@ -1,0 +1,16 @@
+.git
+.github
+.idea
+.vscode
+.agents
+.codex
+
+angular/.angular
+angular/dist
+angular/node_modules
+
+spring-boot/.idea
+spring-boot/target
+
+deploy/.env
+**/*.log

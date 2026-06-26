@@ -1,0 +1,51 @@
+<main class="login-page">
+  <section class="login-panel">
+    <div class="brand-mark" aria-hidden="true">
+      <mat-icon>lock</mat-icon>
+    </div>
+
+    <p class="eyebrow">Private file vault</p>
+    <h1>I tuoi documenti,<br>senza intermediari.</h1>
+    <p class="intro">
+      Accesso protetto tramite il tuo identity provider. Le credenziali
+      non vengono mai gestite o salvate da questa applicazione.
+    </p>
+
+    @if (oauthError) {
+      <div class="status status-error" role="alert">
+        <mat-icon>error_outline</mat-icon>
+        <span>Accesso non riuscito o utente non autorizzato.</span>
+      </div>
+    }
+
+    @if (authState.status() === 'unavailable') {
+      <div class="status status-error" role="alert">
+        <mat-icon>cloud_off</mat-icon>
+        <span>Il servizio non è raggiungibile. Riprova tra poco.</span>
+      </div>
+    }
+
+    <button mat-flat-button class="login-button"
+      [disabled]="authState.status() === 'unavailable'"
+      (click)="login()">
+      <mat-icon>login</mat-icon>
+      Accedi in modo sicuro
+    </button>
+
+    <p class="security-note">
+      Sessione protetta da cookie HttpOnly e verifica CSRF.
+    </p>
+  </section>
+
+  <aside class="visual-panel" aria-hidden="true">
+    <div class="orb orb-one"></div>
+    <div class="orb orb-two"></div>
+    <div class="document-stack">
+      <div class="document back"></div>
+      <div class="document middle"></div>
+      <div class="document front">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </aside>
+</main>

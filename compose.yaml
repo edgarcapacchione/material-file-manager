@@ -1,0 +1,103 @@
+name: material-file-manager
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: spring-boot/Dockerfile
+    image: material-file-manager-backend:local
+    restart: unless-stopped
+    stop_grace_period: 30s
+    env_file:
+      - ${MFM_ENV_FILE:-deploy/.env}
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      MFM_ROOT_PATH: /data
+      MFM_SERVER_ADDRESS: 0.0.0.0
+      MFM_SERVER_PORT: 8080
+    volumes:
+      - type: bind
+        source: ${MFM_DATA_PATH:?Set MFM_DATA_PATH in deploy/.env}
+        target: /data
+    expose:
+      - "8080"
+    networks:
+      - app
+    read_only: true
+    tmpfs:
+      - /tmp:size=256m,mode=1777
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 256
+    logging:
+      driver: local
+      options:
+        max-size: 10m
+        max-file: "5"
+    healthcheck:
+      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/8080"]
+      interval: 15s
+      timeout: 3s
+      retries: 10
+      start_period: 30s
+
+  frontend:
+    build:
+      context: .
+      dockerfile: angular/Dockerfile
+    image: material-file-manager-frontend:local
+    restart: unless-stopped
+    stop_grace_period: 15s
+    environment:
+      MFM_DOMAIN: ${MFM_DOMAIN:?Set MFM_DOMAIN in deploy/.env}
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "80:8080"
+      - "443:8443"
+    volumes:
+      - letsencrypt:/etc/letsencrypt:ro
+      - certbot_webroot:/var/www/certbot:ro
+    networks:
+      - app
+    read_only: true
+    tmpfs:
+      - /tmp:size=128m,mode=1777
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - SETGID
+      - SETUID
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 128
+    logging:
+      driver: local
+      options:
+        max-size: 10m
+        max-file: "5"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8080/nginx-health >/dev/null"]
+      interval: 15s
+      timeout: 3s
+      retries: 5
+
+  certbot:
+    image: certbot/certbot:latest
+    profiles:
+      - tools
+    volumes:
+      - letsencrypt:/etc/letsencrypt
+      - certbot_webroot:/var/www/certbot
+
+networks:
+  app:
+    driver: bridge
+
+volumes:
+  letsencrypt:
+  certbot_webroot:
